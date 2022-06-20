@@ -3,25 +3,40 @@ package br.gov.pa.ideflorbio.ordenamentopeut.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 
 
-@Entity(name="endereco")
+@Entity
+@Table(name="endereco")
 public class Endereco implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank
 	private String logradouro;
+	
+	@NotBlank
+	@Column(name="status_logradouro")
 	private String statusLogradouro;
+	
+	@NotBlank
 	private String bairro;
+	
+	@NotBlank
 	private String Setor;
+	
+	@NotBlank
 	private String municiopio;
 	
 	//relacionamentos

@@ -4,13 +4,17 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
-@Entity(name="orcamento")
+@Entity
+@Table(name="orcamento")
 public class Orcamento implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -18,9 +22,18 @@ public class Orcamento implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
 	private String ptres;
+	
+	@NotBlank
 	private String fonte;
+	
+	@NotBlank
+	@Column(name="elemento_despesa")
 	private String elementoDespesa;
+	
+	
+	//relacionamentos
 	
 	@OneToMany
 	@JoinColumn(name="orcamento")

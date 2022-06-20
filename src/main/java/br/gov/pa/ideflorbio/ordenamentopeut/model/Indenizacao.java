@@ -1,16 +1,23 @@
 package br.gov.pa.ideflorbio.ordenamentopeut.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
-@Entity(name="indenizacao")
+@Entity
+@Table(name="indenizacao")
 public class Indenizacao implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -18,20 +25,42 @@ public class Indenizacao implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
 	private String ob;
+	
+	@NotBlank
+	@Column(name="data_ob")
 	private Date dataOb;
+	
+	@NotBlank
 	private String ne;
+	
+	@NotBlank
+	@Column(name="data_ne")
 	private Date dataNe;
+	
+	@NotBlank
 	private String nl;
+	
+	@NotBlank
 	private Date dataNl;
+	
+	@NotBlank
+	@Column(name="data_acordo")
 	private Date dataAcordo;
-	private Double valor;
-	private String satusPagamento;
+	
+	@NotBlank
+	private BigDecimal valor;
+	
+	
+	@Column(name="status_pagamento")
+	@Enumerated(EnumType.STRING)
+	private Pagamento satusPagamento;
 	
 	//relacionamentos
 	
 	@ManyToOne
-	@JoinColumn(name="indenizacoes")
+	@JoinColumn(name="beneficiario_id")
 	private Beneficiario beneficiario;
 	
 	@ManyToOne
@@ -93,11 +122,11 @@ public class Indenizacao implements Serializable{
 		this.dataAcordo = dataAcordo;
 	}
 
-	public Double getValor() {
+	public BigDecimal getValor() {
 		return valor;
 	}
 
-	public void setValor(Double valor) {
+	public void setValor(BigDecimal valor) {
 		this.valor = valor;
 	}
 
@@ -117,11 +146,12 @@ public class Indenizacao implements Serializable{
 		this.dataNl = dataNl;
 	}
 
-	public String getSatusPagamento() {
+	
+	public Pagamento getSatusPagamento() {
 		return satusPagamento;
 	}
 
-	public void setSatusPagamento(String satusPagamento) {
+	public void setSatusPagamento(Pagamento satusPagamento) {
 		this.satusPagamento = satusPagamento;
 	}
 

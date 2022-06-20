@@ -12,9 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 
-@Entity(name="beneficiario")
+@Entity
+@Table(name="beneficiario")
 public class Beneficiario implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -24,6 +27,7 @@ public class Beneficiario implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
 	private String nome;
 	
 	private String rg;
@@ -41,7 +45,7 @@ public class Beneficiario implements Serializable {
 	@OneToMany(mappedBy="beneficiario")
 	private List<Indenizacao> indenizacoes;
 	
-	@OneToOne
+	@OneToOne(mappedBy="beneficiario")
 	private ContaBancaria banco;
 	
 	
