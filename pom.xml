@@ -65,11 +65,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -77,14 +73,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</include>
-					</includes>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
