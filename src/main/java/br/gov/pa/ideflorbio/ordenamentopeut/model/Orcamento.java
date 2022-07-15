@@ -38,8 +38,8 @@ public class Orcamento implements Serializable {
 	//relacionamentos
 	
 	@OneToMany
-	@JoinColumn(name="orcamento")
-	private List<Indenizacao> pagamento;
+	@JoinColumn(name="indenizacao")
+	private List<Indenizacao> indenizacao;
 	
 	//getters, setters, equals e hash
 	public Long getId() {

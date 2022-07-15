@@ -28,11 +28,11 @@ public class Processo implements Serializable {
 	
 	@Column(name="processo_pae")
 	@NotBlank
-	private Long processoPae;
+	private String processoPae;
 	
 	@NotBlank
 	@Column(name="processo_original")
-	private Long processoOriginal;
+	private String processoOriginal;
 	
 	@NotBlank
 	@Column(name="numero_lote")
@@ -43,17 +43,17 @@ public class Processo implements Serializable {
 	private String statusLote;
 	
 	@NotBlank
-	@Column(name="satus_ processo")
+	@Column(name="status_processo")
 	private String satusProcesso;
 	
 	//relacionamentos
 	
-	@OneToOne(mappedBy="processo")
-	private Endereco endereco;
-	
-	
 	@OneToOne
-	@JoinColumn(name="beneficiario_id")
+	@JoinColumn(name="Localizacao")
+	private Localizacao Localizacao;
+		
+	@OneToOne
+	@JoinColumn(name="beneficiarios")
 	private Beneficiario beneficiario;
 	
 	
@@ -73,16 +73,16 @@ public class Processo implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getProcessoPae() {
+	public String getProcessoPae() {
 		return processoPae;
 	}
-	public void setProcessoPae(Long processoPae) {
+	public void setProcessoPae(String processoPae) {
 		this.processoPae = processoPae;
 	}
-	public Long getProcessoOriginal() {
+	public String getProcessoOriginal() {
 		return processoOriginal;
 	}
-	public void setProcessoOriginal(Long processoOriginal) {
+	public void setProcessoOriginal(String processoOriginal) {
 		this.processoOriginal = processoOriginal;
 	}
 	public String getNumeroLote() {

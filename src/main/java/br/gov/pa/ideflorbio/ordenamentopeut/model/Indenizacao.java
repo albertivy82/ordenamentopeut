@@ -62,15 +62,15 @@ public class Indenizacao implements Serializable{
 	//relacionamentos
 	
 	@ManyToOne
-	@JoinColumn(name="beneficiario_id")
+	@JoinColumn(name="beneficiarios")
 	private Beneficiario beneficiario;
 	
 	@ManyToOne
-	@JoinColumn(name="indenizacoes")
+	@JoinColumn(name="processos")
 	private Processo processo;
 	
 	@ManyToOne
-	@JoinColumn(name="pagamento")
+	@JoinColumn(name="orcamento")
 	private Orcamento Orcamento;
 
 	

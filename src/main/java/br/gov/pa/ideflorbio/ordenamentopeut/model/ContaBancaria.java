@@ -38,7 +38,7 @@ public class ContaBancaria implements Serializable {
 	//relacionamentos
 	
 	@OneToOne
-	@JoinColumn(name="beneficiario_id")
+	@JoinColumn(name="beneficiarios")
 	private Beneficiario beneficiario;
 	
 	

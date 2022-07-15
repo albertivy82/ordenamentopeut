@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -16,8 +17,8 @@ import javax.validation.constraints.NotBlank;
 
 
 @Entity
-@Table(name="endereco")
-public class Endereco implements Serializable {
+@Table(name="localizacao")
+public class Localizacao implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -44,11 +45,12 @@ public class Endereco implements Serializable {
 	//relacionamentos
 	
 	@OneToOne
-	@JoinColumn(name="id")
+	(mappedBy="Localizacao")
 	private Processo processo;
 	
 	
 	//getters,setters,equals e hash
+	
 	public Long getId() {
 		return id;
 	}
@@ -103,7 +105,7 @@ public class Endereco implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Endereco other = (Endereco) obj;
+		Localizacao other = (Localizacao) obj;
 		return Objects.equals(id, other.id);
 	}
 
