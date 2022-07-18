@@ -5,9 +5,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
+
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Processo;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ProcessoRepository;
-import br.gov.pa.ideflorbio.ordenamentopeut.model.Processo;
 
 
 @Component
@@ -34,8 +37,11 @@ public class ProcessoRepositoryImpl implements ProcessoRepository{
 
 	@Transactional
 	@Override
-	public void remover(Processo processo) {
-		processo = buscar(processo.getId());
+	public void remover(Long id) {
+		Processo processo = buscar(id);
+		if(processo == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
 		manager.remove(processo);
 		
 	}

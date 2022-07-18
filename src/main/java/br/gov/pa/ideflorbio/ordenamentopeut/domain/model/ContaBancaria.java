@@ -1,4 +1,4 @@
-package br.gov.pa.ideflorbio.ordenamentopeut.model;
+package br.gov.pa.ideflorbio.ordenamentopeut.domain.model;
 
 import java.io.Serializable;
 import java.util.Objects;

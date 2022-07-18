@@ -61,7 +61,6 @@ CREATE TABLE `indenizacao` (
 
 CREATE TABLE `localizacao` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `setor` varchar(100) DEFAULT NULL,
   `bairro` varchar(60) DEFAULT NULL,
   `logradouro` varchar(100) DEFAULT NULL,
   `municiopio` varchar(50) DEFAULT NULL,

@@ -1,4 +1,4 @@
-package br.gov.pa.ideflorbio.ordenamentopeut.model;
+package br.gov.pa.ideflorbio.ordenamentopeut.domain.model;
 
 import java.io.Serializable;
 import java.util.List;
@@ -44,13 +44,13 @@ public class Processo implements Serializable {
 	
 	@NotBlank
 	@Column(name="status_processo")
-	private String satusProcesso;
+	private String statusProcesso;
 	
 	//relacionamentos
 	
 	@OneToOne
-	@JoinColumn(name="Localizacao")
-	private Localizacao Localizacao;
+	@JoinColumn(name="localizacao")
+	private Localizacao localizacao;
 		
 	@OneToOne
 	@JoinColumn(name="beneficiarios")
@@ -97,11 +97,32 @@ public class Processo implements Serializable {
 	public void setStatusLote(String statusLote) {
 		this.statusLote = statusLote;
 	}
-	public String getSatusProcesso() {
-		return satusProcesso;
+	public String getStatusProcesso() {
+		return statusProcesso;
 	}
 	public void setSatusProcesso(String satusProcesso) {
-		this.satusProcesso = satusProcesso;
+		this.statusProcesso = satusProcesso;
+	}
+	public void setStatusProcesso(String statusProcesso) {
+		this.statusProcesso = statusProcesso;
+	}
+	public Localizacao getLocalizacao() {
+		return localizacao;
+	}
+	public void setLocalizacao(Localizacao localizacao) {
+		this.localizacao = localizacao;
+	}
+	public Beneficiario getBeneficiario() {
+		return beneficiario;
+	}
+	public void setBeneficiario(Beneficiario beneficiario) {
+		this.beneficiario = beneficiario;
+	}
+	public List<Indenizacao> getIndenizacoes() {
+		return indenizacoes;
+	}
+	public void setIndenizacoes(List<Indenizacao> indenizacoes) {
+		this.indenizacoes = indenizacoes;
 	}
 	@Override
 	public int hashCode() {

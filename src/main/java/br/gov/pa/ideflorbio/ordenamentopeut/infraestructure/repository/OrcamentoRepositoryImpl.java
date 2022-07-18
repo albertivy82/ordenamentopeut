@@ -6,10 +6,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Orcamento;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.OrcamentoRepository;
-import br.gov.pa.ideflorbio.ordenamentopeut.model.Orcamento;
 
 
 @Component
@@ -36,8 +37,14 @@ public class OrcamentoRepositoryImpl implements OrcamentoRepository{
 
 	@Transactional
 	@Override
-	public void remover(Orcamento orcamento) {
-	orcamento = buscar(orcamento.getId());
+	public void remover(Long id) {
+			
+		Orcamento orcamento = buscar(id);
+		
+		if(orcamento==null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		
 		manager.remove(orcamento);
 		
 	}

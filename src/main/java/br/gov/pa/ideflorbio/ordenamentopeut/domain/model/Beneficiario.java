@@ -1,4 +1,4 @@
-package br.gov.pa.ideflorbio.ordenamentopeut.model;
+package br.gov.pa.ideflorbio.ordenamentopeut.domain.model;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -38,7 +40,7 @@ public class Beneficiario implements Serializable {
 	private Perfil perfil;
 	
 	//relacionamentos
-	
+	@JsonIgnore
 	@OneToOne(mappedBy="beneficiario")
 	private Processo processo;
 

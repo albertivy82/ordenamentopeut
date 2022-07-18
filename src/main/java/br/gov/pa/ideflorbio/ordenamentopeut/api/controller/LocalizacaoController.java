@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Localizacao;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.LocalizacaoRepository;
-import br.gov.pa.ideflorbio.ordenamentopeut.model.Localizacao;
 
 @RestController
 @RequestMapping("/localizacoes")

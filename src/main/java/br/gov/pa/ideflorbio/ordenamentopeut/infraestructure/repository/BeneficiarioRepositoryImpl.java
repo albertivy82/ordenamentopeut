@@ -6,10 +6,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Beneficiario;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.BeneficiarioRepository;
-import br.gov.pa.ideflorbio.ordenamentopeut.model.Beneficiario;
 
 
 @Component
@@ -36,8 +37,11 @@ public class BeneficiarioRepositoryImpl implements BeneficiarioRepository{
 
 	@Transactional
 	@Override
-	public void remover(Beneficiario beneficiario) {
-		beneficiario = buscar(beneficiario.getId());
+	public void remover(Long id) {
+		Beneficiario beneficiario = buscar(id);
+		if(beneficiario==null) {
+			throw new EmptyResultDataAccessException(1);
+		}
 		manager.remove(beneficiario);
 		
 	}

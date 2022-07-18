@@ -1,4 +1,4 @@
-package br.gov.pa.ideflorbio.ordenamentopeut.model;
+package br.gov.pa.ideflorbio.ordenamentopeut.domain.model;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,11 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -37,15 +37,12 @@ public class Localizacao implements Serializable {
 	private String bairro;
 	
 	@NotBlank
-	private String Setor;
-	
-	@NotBlank
 	private String municiopio;
 	
 	//relacionamentos
-	
+	@JsonIgnore
 	@OneToOne
-	(mappedBy="Localizacao")
+	(mappedBy="localizacao")
 	private Processo processo;
 	
 	
@@ -74,12 +71,6 @@ public class Localizacao implements Serializable {
 	}
 	public void setBairro(String bairro) {
 		this.bairro = bairro;
-	}
-	public String getSetor() {
-		return Setor;
-	}
-	public void setSetor(String setor) {
-		Setor = setor;
 	}
 	public String getMuniciopio() {
 		return municiopio;

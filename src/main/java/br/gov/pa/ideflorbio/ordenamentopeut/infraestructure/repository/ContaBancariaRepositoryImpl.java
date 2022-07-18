@@ -6,10 +6,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.ContaBancaria;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ContaBancariaRepository;
-import br.gov.pa.ideflorbio.ordenamentopeut.model.ContaBancaria;
 
 
 @Component
@@ -39,8 +40,12 @@ public class ContaBancariaRepositoryImpl implements ContaBancariaRepository{
 
 	@Transactional
 	@Override
-	public void remover(ContaBancaria contaBancaria) {
-		contaBancaria = buscar(contaBancaria.getId());
+	public void remover(Long id) {
+		
+		ContaBancaria contaBancaria = buscar(id);
+			if(contaBancaria==null) {
+				throw new EmptyResultDataAccessException(1);
+			}
 		manager.remove(contaBancaria);
 	}
 

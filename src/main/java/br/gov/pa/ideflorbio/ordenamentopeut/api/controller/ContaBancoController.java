@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.ContaBancaria;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ContaBancariaRepository;
-import br.gov.pa.ideflorbio.ordenamentopeut.model.ContaBancaria;
 
 @RestController
 @RequestMapping("/contasbancarias")

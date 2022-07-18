@@ -6,10 +6,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Indenizacao;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.IndenizacaoRepository;
-import br.gov.pa.ideflorbio.ordenamentopeut.model.Indenizacao;
 
 
 @Component
@@ -35,8 +36,13 @@ public class IndenizacaoRepositoryImpl implements IndenizacaoRepository{
 	}
 
 	@Override
-	public void remover(Indenizacao indenizacao) {
-		indenizacao = buscar(indenizacao.getId());
+	public void remover(Long id) {
+		
+	
+		Indenizacao indenizacao = buscar(id);
+		    if(indenizacao == null)	{
+		    	throw new EmptyResultDataAccessException(1);
+		    }
 		manager.remove(indenizacao);
 		
 	}
