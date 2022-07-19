@@ -7,28 +7,30 @@ import org.springframework.stereotype.Service;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.ContaBancaria;
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ContaBancariaRepository;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Indenizacao;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.IndenizacaoRepository;
 
 @Service
-public class CadastroContaBancariaService {
+public class CadastroIndenizacaoService {
 	
 	@Autowired
-	private ContaBancariaRepository contasBancarias;
+	public IndenizacaoRepository indenizacoes;
 	
-	public ContaBancaria salvar(ContaBancaria contaBnacaria) {
-		return contasBancarias.salvar(contaBnacaria);
+	public Indenizacao salvar(Indenizacao indenizacao) {
+		return indenizacoes.salvar(indenizacao);
 	}
 	
-	public void excluir(Long id) {
+	
+	public void remover(Long id) {
+		
 		try {
-			contasBancarias.remover(id);
+		indenizacoes.remover(id);
 		}catch(DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(String.
-					format("Beneficiario de código % não pode ser removida, pois está em uso", id));
+					format("Indenizacao de código % não pode ser removido, pois está em uso", id));
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.
-					format("Beneficiario de código % não pode não existe", id));
+					format("Indenizacao de código % não existe", id));
 		}
 	}
 

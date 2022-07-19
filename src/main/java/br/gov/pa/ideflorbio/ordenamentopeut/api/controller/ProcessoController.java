@@ -18,6 +18,7 @@ import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoExcept
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Processo;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ProcessoRepository;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.service.CadastroProcessoService;
 
 
 
@@ -27,6 +28,9 @@ public class ProcessoController {
 	
 	@Autowired
 	private ProcessoRepository processos;
+	
+	@Autowired
+	private CadastroProcessoService cadastroProcesso;
 	
 	@GetMapping
 	public List<Processo> listar(){
@@ -47,13 +51,13 @@ public class ProcessoController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Processo adicionar(@RequestBody Processo processo) {
-		return processos.salvar(processo);
+		return cadastroProcesso.salvar(processo);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Processo> excluir(@PathVariable Long id){
 		try {
-			processos.remover(id);
+			cadastroProcesso.remover(id);
 			return ResponseEntity.status(HttpStatus.OK).build();
 		}catch(EntidadeEmUsoException e){
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
