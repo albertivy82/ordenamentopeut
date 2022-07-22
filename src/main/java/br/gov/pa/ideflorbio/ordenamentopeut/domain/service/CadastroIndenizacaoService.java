@@ -31,20 +31,22 @@ public class CadastroIndenizacaoService {
 	@Autowired
 	private OrcamentoRepository pesquisaOrcamento;
 	
+	
+	//--------MÉTODOS---------//
+	
 	public Indenizacao salvar(Indenizacao indenizacao) {
 		
-		Beneficiario beneficiariPesquisado = pesquisarBenficiario.getReferenceById(indenizacao.getBeneficiario().getId());
-		Processo processopesquisado = pesquisaProcesso.getReferenceById(indenizacao.getProcesso().getId());
-		Orcamento orcamentoPesquisado = pesquisaOrcamento.getReferenceById(indenizacao.getOrcamento().getId());
-		if(beneficiariPesquisado==null) {
-			throw new EntidadeNaoEncontradaException("O beneficiario informado não existe");
-		}
-		if(processopesquisado==null) {
-			throw new EntidadeNaoEncontradaException("O processo informado não existe");
-		}
-		if(orcamentoPesquisado==null) {
-			throw new EntidadeNaoEncontradaException("O orçamento informado não existe");
-		}
+		Beneficiario beneficiariPesquisado = pesquisarBenficiario.
+				findById(indenizacao.getBeneficiario().getId()).
+				orElseThrow(()-> new EntidadeNaoEncontradaException("O beneficiario informado não existe"));
+		
+		Processo processopesquisado = pesquisaProcesso.
+				findById(indenizacao.getProcesso().getId()).
+				orElseThrow(()->new EntidadeNaoEncontradaException("O processo informado não existe"));
+		
+		Orcamento orcamentoPesquisado = pesquisaOrcamento.
+				findById(indenizacao.getOrcamento().getId()).
+				orElseThrow(()-> new EntidadeNaoEncontradaException("O orçamento informado não existe"));
 		
 		indenizacao.setBeneficiario(beneficiariPesquisado);
 		indenizacao.setProcesso(processopesquisado);

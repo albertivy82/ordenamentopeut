@@ -1,7 +1,9 @@
 package br.gov.pa.ideflorbio.ordenamentopeut.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.ContaBancaria;
@@ -38,9 +38,9 @@ public class ContaBancoController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<ContaBancaria> buscar(@PathVariable Long id) {
-		ContaBancaria conta = contasBancarias.getReferenceById(id);
-			if(conta!=null) {
-				return ResponseEntity.status(HttpStatus.OK).body(conta);
+		Optional<ContaBancaria> conta = contasBancarias.findById(id);
+			if(conta.isPresent()) {
+				return ResponseEntity.status(HttpStatus.OK).body(conta.get());
 			}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();	
 	}
@@ -55,8 +55,20 @@ public class ContaBancoController {
 		}
 	}
 	
-	//@PutMapping("/{id}")
-	//public ResponseEntity<?>atualizar(@PatVariable Long id, @RequestBody )
+	@PutMapping("/{id}")
+	public ResponseEntity<?>atualizar(@PathVariable Long id, @RequestBody ContaBancaria contaRecebida){
+		try {
+			ContaBancaria contaProcurada = contasBancarias.findById(id).orElse(null);
+			if(contaProcurada!=null) {
+				BeanUtils.copyProperties(contaRecebida, contaProcurada, "id");
+				contaProcurada = bancos.salvar(contaProcurada);
+				return ResponseEntity.status(HttpStatus.OK).body(contaProcurada);
+			}
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}catch(EntidadeNaoEncontradaException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
+	}
 		
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ContaBancaria> apagar(@PathVariable Long id){

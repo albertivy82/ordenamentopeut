@@ -1,6 +1,7 @@
 package br.gov.pa.ideflorbio.ordenamentopeut.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -38,9 +39,10 @@ public class IndenizacaoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Indenizacao> buscar(@PathVariable Long id){
 		
-		Indenizacao indenizacao = indenizacoes.getReferenceById(id);
-		if(indenizacao!=null) {
-		return ResponseEntity.status(HttpStatus.OK).body(indenizacao);
+		Optional<Indenizacao> indenizacao = indenizacoes.findById(id);
+		
+		if(indenizacao.isPresent()) {
+		return ResponseEntity.status(HttpStatus.OK).body(indenizacao.get());
 		}
 	
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

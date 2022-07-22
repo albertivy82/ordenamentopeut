@@ -1,6 +1,7 @@
 package br.gov.pa.ideflorbio.ordenamentopeut.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,8 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Localizacao;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.LocalizacaoRepository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.service.CadastroLocalizacaoService;
@@ -31,7 +37,32 @@ public class LocalizacaoController {
 		return localizacoes.findAll();
 	}
 	
-	@DeleteMapping
+	@GetMapping("/{id}")
+	private ResponseEntity<?> buscar(@PathVariable Long id){
+		
+		Optional<Localizacao> localizacaoPesquisada = localizacoes.findById(id);
+		
+			if(localizacaoPesquisada.isPresent()) {
+				return ResponseEntity.status(HttpStatus.OK).body(localizacaoPesquisada);
+			}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+	
+	@PostMapping
+	public ResponseEntity<?>adicionar(@RequestBody Localizacao localizacao){
+		try {
+			cadastroLocalizacao.salvar(localizacao);
+			return ResponseEntity.status(HttpStatus.CREATED).body(localizacao);
+		}catch(EntidadeNaoEncontradaException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+		
+	}
+	
+	@PutMapping
+	public ResponseEntity<?>
+	
+	@DeleteMapping("/{id}")
 	private ResponseEntity<Localizacao> apagar(@PathVariable Long id){
 		try {
 			cadastroLocalizacao.remover(id);

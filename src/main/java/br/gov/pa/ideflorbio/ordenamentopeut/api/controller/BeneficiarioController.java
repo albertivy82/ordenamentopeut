@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
@@ -52,9 +51,9 @@ public class BeneficiarioController {
 	}
 	
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Beneficiario adicionar(@RequestBody Beneficiario beneficiario) {
-		return cadastroBneficiario.salvar(beneficiario);
+	public ResponseEntity<Beneficiario> adicionar(@RequestBody Beneficiario beneficiario) {
+		beneficiarios.save(beneficiario);
+		return ResponseEntity.status(HttpStatus.CREATED).body(beneficiario);
 	}
 	
 	@PutMapping("/{id}")

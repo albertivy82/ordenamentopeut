@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Beneficiario;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Processo;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.BeneficiarioRepository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ProcessoRepository;
 
 @Service
@@ -16,8 +18,18 @@ public class CadastroProcessoService {
 	@Autowired
 	private ProcessoRepository processos;
 	
-	public Processo salvar(Processo pocesso) {
-		return processos.save(pocesso);
+	@Autowired
+	private BeneficiarioRepository beneficiarios;
+	
+	
+	//-----MÉTODOS------//
+	
+	public Processo salvar(Processo processo) {
+		Beneficiario beneficiarioProcurado = beneficiarios.findById(processo.getBeneficiario().getId()).
+				orElseThrow(()-> new EntidadeNaoEncontradaException("O beneficiario informado não existe"));
+		
+		processo.setBeneficiario(beneficiarioProcurado);
+		return processos.save(processo);
 	}
 	
 	public void remover(Long id) {

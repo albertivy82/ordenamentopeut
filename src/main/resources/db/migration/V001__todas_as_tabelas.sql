@@ -1,9 +1,9 @@
 CREATE TABLE `beneficiario` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(50) DEFAULT NULL,
+  `nome` varchar(50) NOT NULL,
   `cpf` varchar(30) DEFAULT NULL,
   `rg` varchar(30) DEFAULT NULL,
-  `perfil` varchar(15) DEFAULT NULL,
+  `perfil` varchar(15) NOT NULL,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
