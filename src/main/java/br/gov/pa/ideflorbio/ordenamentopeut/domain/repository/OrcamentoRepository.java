@@ -2,17 +2,12 @@ package br.gov.pa.ideflorbio.ordenamentopeut.domain.repository;
 
 
 
-import java.util.List;
-
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Orcamento;
 
-
-
-public interface OrcamentoRepository{
+@Repository
+public interface OrcamentoRepository extends JpaRepository<Orcamento, Long>{
 	
-	List<Orcamento> listar();
-	Orcamento buscar(Long id);
-	Orcamento salvar(Orcamento orcamento);
-	void remover(Long id);
-
+	
 }

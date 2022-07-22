@@ -2,17 +2,14 @@ package br.gov.pa.ideflorbio.ordenamentopeut.domain.repository;
 
 
 
-import java.util.List;
-
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Localizacao;
 
-
-public interface LocalizacaoRepository{
+@Repository
+public interface LocalizacaoRepository extends JpaRepository<Localizacao, Long>{
 	
-	List<Localizacao> listar();
-	Localizacao buscar(Long id);
-	Localizacao salvar(Localizacao Localizacao);
-	void remover(Long id);
+
 	
 
 }

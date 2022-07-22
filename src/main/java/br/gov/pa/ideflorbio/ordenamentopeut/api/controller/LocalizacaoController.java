@@ -28,7 +28,7 @@ public class LocalizacaoController {
 	
 	@GetMapping
 	private List<Localizacao> listar(){
-		return localizacoes.listar();
+		return localizacoes.findAll();
 	}
 	
 	@DeleteMapping

@@ -34,13 +34,13 @@ public class ProcessoController {
 	
 	@GetMapping
 	public List<Processo> listar(){
-		return processos.listar();
+		return processos.findAll();
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Processo> Buscar(@PathVariable Long id){
 		
-		Processo processo = processos.buscar(id);
+		Processo processo = processos.getReferenceById(id);
 		if(processo!=null) {
 		return ResponseEntity.status(HttpStatus.OK).body(processo);
 		}

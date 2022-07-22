@@ -9,10 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="orcamento")
@@ -36,9 +37,8 @@ public class Orcamento implements Serializable {
 	
 	
 	//relacionamentos
-	
-	@OneToMany
-	@JoinColumn(name="indenizacao")
+	@JsonIgnore
+	@OneToMany(mappedBy="orcamento")
 	private List<Indenizacao> indenizacao;
 	
 	//getters, setters, equals e hash
@@ -65,6 +65,13 @@ public class Orcamento implements Serializable {
 	}
 	public void setElementoDespesa(String elementoDespesa) {
 		this.elementoDespesa = elementoDespesa;
+	}
+	
+	public List<Indenizacao> getIndenizacao() {
+		return indenizacao;
+	}
+	public void setIndenizacao(List<Indenizacao> indenizacao) {
+		this.indenizacao = indenizacao;
 	}
 	
 	@Override

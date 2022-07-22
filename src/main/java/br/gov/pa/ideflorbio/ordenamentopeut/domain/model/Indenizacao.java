@@ -28,30 +28,30 @@ public class Indenizacao implements Serializable{
 	private Long id;
 	
 	@NotBlank
-	private String ob;
+	private String nl;
 	
-	@NotBlank
-	@Column(name="data_ob")
-	private Date dataOb;
+	@Column(name="data_nl")
+	private Date dataNl;
 	
 	@NotBlank
 	private String ne;
 	
-	@NotBlank
 	@Column(name="data_ne")
 	private Date dataNe;
 	
-	@NotBlank
-	private String nl;
 	
 	@NotBlank
-	private Date dataNl;
+	private String ob;
 	
-	@NotBlank
+	
+	@Column(name="data_ob")
+	private Date dataOb;
+	
+	
 	@Column(name="data_acordo")
 	private Date dataAcordo;
 	
-	@NotBlank
+	
 	private BigDecimal valor;
 	
 	
@@ -71,7 +71,7 @@ public class Indenizacao implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name="orcamento")
-	private Orcamento Orcamento;
+	private Orcamento orcamento;
 
 	
 	//getters, setters, equal e hash
@@ -171,6 +171,14 @@ public class Indenizacao implements Serializable{
 
 	public void setProcesso(Processo processo) {
 		this.processo = processo;
+	}
+
+	public Orcamento getOrcamento() {
+		return orcamento;
+	}
+
+	public void setOrcamento(Orcamento orcamento) {
+		this.orcamento = orcamento;
 	}
 
 	@Override

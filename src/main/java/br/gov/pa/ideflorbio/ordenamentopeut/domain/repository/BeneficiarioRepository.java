@@ -1,18 +1,14 @@
 package br.gov.pa.ideflorbio.ordenamentopeut.domain.repository;
 
 
-
-
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Beneficiario;
 
-
-public interface BeneficiarioRepository{
+@Repository
+public interface BeneficiarioRepository extends JpaRepository<Beneficiario, Long>{
 	
-	List<Beneficiario> listar();
-	Beneficiario buscar(Long id);
-	Beneficiario salvar(Beneficiario beneficiario);
-	void remover(Long id);
+	
 
 }

@@ -17,18 +17,18 @@ public class CadastroOrcamentoService {
 	private OrcamentoRepository orcamentos;
 	
 	public Orcamento salvar(Orcamento orcamento) {
-		return orcamentos.salvar(orcamento);
+		return orcamentos.save(orcamento);
 	}
 	
 	public void remover(Long id) {
 		try {
-			orcamentos.remover(id);
+			orcamentos.deleteById(id);
 		}catch(DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(String.
-					format("Beneficiario de código % não pode ser removido, pois está em uso", id));
+					format("Beneficiario de código %d não pode ser removido, pois está em uso", id));
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.
-					format("Beneficiario de código % não existe", id));
+					format("Beneficiario de código %d não existe", id));
 		}
 	}
 

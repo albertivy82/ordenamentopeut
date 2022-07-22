@@ -17,19 +17,19 @@ public class CadastroProcessoService {
 	private ProcessoRepository processos;
 	
 	public Processo salvar(Processo pocesso) {
-		return processos.salvar(pocesso);
+		return processos.save(pocesso);
 	}
 	
 	public void remover(Long id) {
 		
 		try {
-		processos.remover(id);
+		processos.deleteById(id);
 		}catch(DataIntegrityViolationException e) {
 			throw new EntidadeNaoEncontradaException(String.
-					format("Processo de código % de código % não existe", id));
+					format("Processo de código %d de código % não existe", id));
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeEmUsoException(String.
-					format("Processo de código % não pode ser removido, pois está em uso", id));
+					format("Processo de código %d não pode ser removido, pois está em uso", id));
 		}
 	}
 	

@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="processo")
 public class Processo implements Serializable {
@@ -56,7 +58,7 @@ public class Processo implements Serializable {
 	@JoinColumn(name="beneficiarios")
 	private Beneficiario beneficiario;
 	
-	
+	@JsonIgnore
 	@OneToMany(mappedBy="processo")
 	private List<Indenizacao> indenizacoes;
 	

@@ -16,8 +16,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name="beneficiario")
 public class Beneficiario implements Serializable {
@@ -32,27 +33,15 @@ public class Beneficiario implements Serializable {
 	@NotBlank
 	private String nome;
 	
-	private String rg;
-	
 	private String cpf;
+	
+	private String rg;
 	
 	@Enumerated(EnumType.STRING)
 	private Perfil perfil;
 	
-	//relacionamentos
-	@JsonIgnore
-	@OneToOne(mappedBy="beneficiario")
-	private Processo processo;
-
-	@OneToMany(mappedBy="beneficiario")
-	private List<Indenizacao> indenizacoes;
+	//----RELACIONAMENTOS----///
 	
-	@OneToOne(mappedBy="beneficiario")
-	private ContaBancaria banco;
-	
-	
-	
-	//getters, setters, equal e hash
 	public Long getId() {
 		return id;
 	}
@@ -92,31 +81,7 @@ public class Beneficiario implements Serializable {
 	public void setPerfil(Perfil perfil) {
 		this.perfil = perfil;
 	}
-
-	public Processo getProcesso() {
-		return processo;
-	}
-
-	public void setProcesso(Processo processo) {
-		this.processo = processo;
-	}
-
-	public List<Indenizacao> getIndenizacoes() {
-		return indenizacoes;
-	}
-
-	public void setIndenizacoes(List<Indenizacao> indenizacoes) {
-		this.indenizacoes = indenizacoes;
-	}
-
-	public ContaBancaria getBanco() {
-		return banco;
-	}
-
-	public void setBanco(ContaBancaria banco) {
-		this.banco = banco;
-	}
-
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

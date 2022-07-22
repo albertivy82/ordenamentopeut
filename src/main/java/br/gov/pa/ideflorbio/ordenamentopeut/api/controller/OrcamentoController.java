@@ -29,8 +29,10 @@ public class OrcamentoController {
 	
 	@GetMapping
 	public List<Orcamento> listar(){
-		return orcamento.listar();
+		return orcamento.findAll();
 	}
+	
+
 	
 	@DeleteMapping
 	public ResponseEntity<Orcamento> apagar(@PathVariable Long id){

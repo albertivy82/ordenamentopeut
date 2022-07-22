@@ -17,18 +17,18 @@ public class CadastroLocalizacaoService {
 	private LocalizacaoRepository localizacoes;
 	
 	public Localizacao salvar(Localizacao localizacao) {
-		return localizacoes.salvar(localizacao);
+		return localizacoes.save(localizacao);
 	}
 	
 	public void remover(Long id) {
 		try {
-			localizacoes.remover(id);
+			localizacoes.deleteById(id);
 		}catch(DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(String.
-					format("Beneficiario de código % não pode ser removido, pois está em uso", id));
+					format("Beneficiario de código %d não pode ser removido, pois está em uso", id));
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.
-					format("Beneficiario de código % não existe", id));
+					format("Beneficiario de código %d não existe", id));
 		}
 	}
 

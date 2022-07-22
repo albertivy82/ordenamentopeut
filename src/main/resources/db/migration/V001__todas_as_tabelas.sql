@@ -1,10 +1,10 @@
 CREATE TABLE `beneficiario` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `cpf` varchar(30) DEFAULT NULL,
   `nome` varchar(50) DEFAULT NULL,
-  `perfil` varchar(15) DEFAULT NULL,
+  `cpf` varchar(30) DEFAULT NULL,
   `rg` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `perfil` varchar(15) DEFAULT NULL,
+   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 
@@ -44,18 +44,18 @@ CREATE TABLE `orcamento` (
 
 CREATE TABLE `indenizacao` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `data_acordo` date DEFAULT NULL,
-  `data_ne` date DEFAULT NULL,
-  `data_nl` date DEFAULT NULL,
-  `data_ob` date DEFAULT NULL,
-  `ne` varchar(15) DEFAULT NULL,
-  `nl` varchar(15) DEFAULT NULL,
-  `ob` varchar(15) DEFAULT NULL,
-  `status_pagamento` varchar(100) DEFAULT NULL,
-  `valor` decimal(19,2) DEFAULT NULL,
-  `beneficiarios` bigint(20),
-  `processos` bigint(20),
-  `orcamento` bigint(20) DEFAULT NULL,
+  `nl` varchar(15) NOT NULL,
+  `data_nl` date NOT NULL,
+  `ne` varchar(15) NOT NULL,
+  `data_ne` date NOT NULL,
+  `ob` varchar(15) NOT NULL,
+  `data_ob` date NOT NULL,
+  `data_acordo` date NOT NULL,
+  `status_pagamento` varchar(100) NOT NULL,
+  `valor` decimal(19,2) NOT NULL,
+  `beneficiarios` bigint(20) NOT NULL,
+  `processos` bigint(20) NOT NULL,
+  `orcamento` bigint(20)NOT NULL,
   PRIMARY KEY (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 

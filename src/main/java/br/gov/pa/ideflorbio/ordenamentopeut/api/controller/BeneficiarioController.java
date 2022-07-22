@@ -1,6 +1,7 @@
 package br.gov.pa.ideflorbio.ordenamentopeut.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,20 +32,22 @@ public class BeneficiarioController {
 	@Autowired
 	private CadastroBeneficiarioService cadastroBneficiario;
 	
+	
+	//----MÉTODOS------//
+	
 	@GetMapping
 	public List<Beneficiario> listar(){
-		return beneficiarios.listar();
+		return beneficiarios.findAll();
 		 
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Beneficiario> buscar(@PathVariable("id") Long id){
-		Beneficiario beneficiario = beneficiarios.buscar(id);
+	public ResponseEntity<Beneficiario> buscar(@PathVariable Long id){
 		
-		if(beneficiario!=null) {
-			return ResponseEntity.status(HttpStatus.OK).body(beneficiario);	
-		}
-		
+		Optional<Beneficiario> beneficiario = beneficiarios.findById(id);
+			if(beneficiario.isPresent()) {
+				return ResponseEntity.status(HttpStatus.OK).body(beneficiario.get());
+			}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	
@@ -56,13 +59,14 @@ public class BeneficiarioController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Beneficiario> atualizar(@PathVariable Long id, @RequestBody Beneficiario beneficiario) {
-		Beneficiario beneficiarioAtual = beneficiarios.buscar(id);
 		
-		if(beneficiarioAtual!=null) {
+		Optional<Beneficiario> beneficiarioAtual = beneficiarios.findById(id);
+		
+		if(beneficiarioAtual.isPresent()) {
 			
-			BeanUtils.copyProperties(beneficiario, beneficiarioAtual, "id");
-			beneficiarioAtual = cadastroBneficiario.salvar(beneficiarioAtual);
-			return ResponseEntity.status(HttpStatus.OK).body(beneficiarioAtual);
+			BeanUtils.copyProperties(beneficiario, beneficiarioAtual.get(), "id");
+			Beneficiario beneficiarioSalvo = cadastroBneficiario.salvar(beneficiarioAtual.get());
+			return ResponseEntity.status(HttpStatus.OK).body(beneficiarioSalvo);
 		}
 		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

@@ -1,14 +1,12 @@
 package br.gov.pa.ideflorbio.ordenamentopeut.domain.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.ContaBancaria;
 
-public interface ContaBancariaRepository {
+@Repository
+public interface ContaBancariaRepository extends JpaRepository<ContaBancaria, Long> {
 	
-	List<ContaBancaria> listar();
-	ContaBancaria buscar(Long id);
-	ContaBancaria salvar(ContaBancaria contaBancaria);
-	void remover(Long id);
-
+	
 }
