@@ -1,17 +1,20 @@
 package br.gov.pa.ideflorbio.ordenamentopeut.domain.model;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -30,14 +33,16 @@ public class Beneficiario implements Serializable {
 	@NotBlank
 	private String nome;
 	
-	private String cpf;
+	private String cpf = "Não Informado";
 	
-	private String rg;
+	private String rg = "Não Informado";
 	
 	@Enumerated(EnumType.STRING)
 	private Perfil perfil;
 	
-	
+	@JsonIgnore
+	@OneToOne(mappedBy ="beneficiario", fetch=FetchType.LAZY)
+	private ContaBancaria conta;
 	
 	public Long getId() {
 		return id;
@@ -79,6 +84,14 @@ public class Beneficiario implements Serializable {
 		this.perfil = perfil;
 	}
 	
+	public ContaBancaria getConta() {
+		return conta;
+	}
+
+	public void setConta(ContaBancaria conta) {
+		this.conta = conta;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

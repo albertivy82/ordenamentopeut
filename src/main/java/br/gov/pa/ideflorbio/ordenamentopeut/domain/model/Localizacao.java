@@ -27,17 +27,17 @@ public class Localizacao implements Serializable {
 	private Long id;
 	
 	@NotBlank
-	private String logradouro;
-	
-	@NotBlank
-	@Column(name="status_logradouro")
-	private String statusLogradouro;
+	private String municiopio;
 	
 	@NotBlank
 	private String bairro;
 	
 	@NotBlank
-	private String municiopio;
+	private String logradouro;
+	
+	@NotBlank
+	@Column(name="status_logradouro")
+	private String statusLogradouro;
 	
 	//relacionamentos
 	@JsonIgnore

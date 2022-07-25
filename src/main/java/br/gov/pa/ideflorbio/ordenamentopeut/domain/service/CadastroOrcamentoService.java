@@ -16,6 +16,9 @@ public class CadastroOrcamentoService {
 	@Autowired
 	private OrcamentoRepository orcamentos;
 	
+	
+	//-------MÉTODOS--------//
+	
 	public Orcamento salvar(Orcamento orcamento) {
 		return orcamentos.save(orcamento);
 	}
@@ -25,10 +28,10 @@ public class CadastroOrcamentoService {
 			orcamentos.deleteById(id);
 		}catch(DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(String.
-					format("Beneficiario de código %d não pode ser removido, pois está em uso", id));
+					format("Orçamento de código %d não pode ser removido, pois está em uso", id));
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.
-					format("Beneficiario de código %d não existe", id));
+					format("Orçamento de código %d não existe", id));
 		}
 	}
 

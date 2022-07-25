@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Beneficiario;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.ContaBancaria;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Indenizacao;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Orcamento;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Processo;
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.BeneficiarioRepository;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ContaBancariaRepository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.IndenizacaoRepository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.OrcamentoRepository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ProcessoRepository;
@@ -23,7 +23,7 @@ public class CadastroIndenizacaoService {
 	public IndenizacaoRepository indenizacoes;
 	
 	@Autowired
-	private BeneficiarioRepository pesquisarBenficiario;
+	private ContaBancariaRepository pesquisarConta;
 	
 	@Autowired
 	private ProcessoRepository pesquisaProcesso;
@@ -36,9 +36,9 @@ public class CadastroIndenizacaoService {
 	
 	public Indenizacao salvar(Indenizacao indenizacao) {
 		
-		Beneficiario beneficiariPesquisado = pesquisarBenficiario.
-				findById(indenizacao.getBeneficiario().getId()).
-				orElseThrow(()-> new EntidadeNaoEncontradaException("O beneficiario informado não existe"));
+		ContaBancaria contaPesquisada = pesquisarConta.
+				findById(indenizacao.getContaDeposito().getId()).
+				orElseThrow(()-> new EntidadeNaoEncontradaException("A Conta Bancária informada não existe"));
 		
 		Processo processopesquisado = pesquisaProcesso.
 				findById(indenizacao.getProcesso().getId()).
@@ -48,7 +48,7 @@ public class CadastroIndenizacaoService {
 				findById(indenizacao.getOrcamento().getId()).
 				orElseThrow(()-> new EntidadeNaoEncontradaException("O orçamento informado não existe"));
 		
-		indenizacao.setBeneficiario(beneficiariPesquisado);
+		indenizacao.setContaDeposito(contaPesquisada);
 		indenizacao.setProcesso(processopesquisado);
 		indenizacao.setOrcamento(orcamentoPesquisado);
 		

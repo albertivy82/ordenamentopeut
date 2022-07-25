@@ -62,8 +62,8 @@ public class Indenizacao implements Serializable{
 	//relacionamentos
 	
 	@ManyToOne
-	@JoinColumn(name="beneficiarios")
-	private Beneficiario beneficiario;
+	@JoinColumn(name="conta_deposito")
+	private ContaBancaria contaDeposito;
 	
 	@ManyToOne
 	@JoinColumn(name="processos")
@@ -157,12 +157,12 @@ public class Indenizacao implements Serializable{
 		this.satusPagamento = satusPagamento;
 	}
 
-	public Beneficiario getBeneficiario() {
-		return beneficiario;
+	public ContaBancaria getContaDeposito() {
+		return contaDeposito;
 	}
 
-	public void setBeneficiario(Beneficiario beneficiario) {
-		this.beneficiario = beneficiario;
+	public void setContaDeposito(ContaBancaria contaDeposito) {
+		this.contaDeposito = contaDeposito;
 	}
 
 	public Processo getProcesso() {

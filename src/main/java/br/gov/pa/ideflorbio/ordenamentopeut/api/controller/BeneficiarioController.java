@@ -34,6 +34,8 @@ public class BeneficiarioController {
 	
 	//----MÉTODOS------//
 	
+
+	
 	@GetMapping
 	public List<Beneficiario> listar(){
 		return beneficiarios.findAll();

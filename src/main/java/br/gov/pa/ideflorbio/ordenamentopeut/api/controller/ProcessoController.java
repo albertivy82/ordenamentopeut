@@ -79,7 +79,7 @@ public class ProcessoController {
 	public ResponseEntity<Processo> excluir(@PathVariable Long id){
 		try {
 			cadastroProcesso.remover(id);
-			return ResponseEntity.status(HttpStatus.OK).build();
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		}catch(EntidadeEmUsoException e){
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}catch(EntidadeNaoEncontradaException e) {

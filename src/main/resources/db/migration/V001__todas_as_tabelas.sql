@@ -1,8 +1,8 @@
 CREATE TABLE `beneficiario` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
-  `cpf` varchar(30) DEFAULT NULL,
-  `rg` varchar(30) DEFAULT NULL,
+  `cpf` varchar(30) NOT NULL,
+  `rg` varchar(30) NOT NULL,
   `perfil` varchar(15) NOT NULL,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
@@ -23,9 +23,9 @@ CREATE TABLE `processo` (
 
 CREATE TABLE `dados_bancarios` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `agencia` varchar(10) DEFAULT NULL,
-  `banco` varchar(50) DEFAULT NULL,
-  `conta_corrente` varchar(20) DEFAULT NULL,
+  `agencia` varchar(10) NOT NULL,
+  `banco` varchar(50) NOT NULL,
+  `conta_corrente` varchar(20) NOT NULL,
   `op` varchar(10) DEFAULT NULL,
   `beneficiarios` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -53,7 +53,7 @@ CREATE TABLE `indenizacao` (
   `data_acordo` date NOT NULL,
   `status_pagamento` varchar(100) NOT NULL,
   `valor` decimal(19,2) NOT NULL,
-  `beneficiarios` bigint(20) NOT NULL,
+  `conta_deposito` bigint(20) NOT NULL,
   `processos` bigint(20) NOT NULL,
   `orcamento` bigint(20)NOT NULL,
   PRIMARY KEY (`id`)
@@ -61,10 +61,10 @@ CREATE TABLE `indenizacao` (
 
 CREATE TABLE `localizacao` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `bairro` varchar(60) DEFAULT NULL,
-  `logradouro` varchar(100) DEFAULT NULL,
-  `municiopio` varchar(50) DEFAULT NULL,
-  `status_logradouro` varchar(255) DEFAULT NULL,
+  `municiopio` varchar(50) NOT NULL,
+  `bairro` varchar(60) NOT NULL,
+  `logradouro` varchar(100) NOT NULL,
+  `status_logradouro` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 

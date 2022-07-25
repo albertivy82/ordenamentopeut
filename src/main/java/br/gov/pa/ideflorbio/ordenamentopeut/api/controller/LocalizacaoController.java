@@ -3,6 +3,7 @@ package br.gov.pa.ideflorbio.ordenamentopeut.api.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Localizacao;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.LocalizacaoRepository;
@@ -43,33 +45,42 @@ public class LocalizacaoController {
 		Optional<Localizacao> localizacaoPesquisada = localizacoes.findById(id);
 		
 			if(localizacaoPesquisada.isPresent()) {
-				return ResponseEntity.status(HttpStatus.OK).body(localizacaoPesquisada);
+				return ResponseEntity.status(HttpStatus.OK).body(localizacaoPesquisada.get());
 			}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	
 	@PostMapping
 	public ResponseEntity<?>adicionar(@RequestBody Localizacao localizacao){
-		try {
-			cadastroLocalizacao.salvar(localizacao);
-			return ResponseEntity.status(HttpStatus.CREATED).body(localizacao);
-		}catch(EntidadeNaoEncontradaException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		}
+		cadastroLocalizacao.salvar(localizacao);
 		
+		return ResponseEntity.status(HttpStatus.CREATED).body(localizacao);
 	}
 	
-	@PutMapping
-	public ResponseEntity<?>
+	@PutMapping("/{id}")
+	public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Localizacao localizacao){
+		Optional<Localizacao> localizacaoEnviada = localizacoes.findById(id);
+		
+		if(localizacaoEnviada.isPresent()) {
+			
+			BeanUtils.copyProperties(localizacao, localizacaoEnviada.get(), "id");
+			Localizacao localizacaoSalva = cadastroLocalizacao.salvar(localizacaoEnviada.get());
+			return ResponseEntity.status(HttpStatus.OK).body(localizacaoSalva);
+		}
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+	
+	
 	
 	@DeleteMapping("/{id}")
 	private ResponseEntity<Localizacao> apagar(@PathVariable Long id){
 		try {
 			cadastroLocalizacao.remover(id);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		}catch(DataIntegrityViolationException e) {
+		}catch(EntidadeEmUsoException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}catch(EmptyResultDataAccessException e) {
+		}catch(EntidadeNaoEncontradaException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
