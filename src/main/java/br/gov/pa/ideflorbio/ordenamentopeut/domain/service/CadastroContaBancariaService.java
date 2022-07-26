@@ -17,35 +17,44 @@ import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ContaBancariaRepos
 @Service
 public class CadastroContaBancariaService {
 	
+	private static final String ENTIDADE_EM_USO = "Conta Bancaia de código %d não pode ser removida, pois está em uso";
+
+	private static final String ENTIDADE_NAO_ENONTRDA = "Conta Bancaria de código %d não existe";
+//-------------------------------------------------------------------------------------------------//
 	@Autowired
 	private ContaBancariaRepository contasBancarias;
 	
 	@Autowired
-	private BeneficiarioRepository pesquisarBeneficiario;
+	private CadastroBeneficiarioService beneficiario;
 	
-	
+//-------------------------------------------------------------------------------------------------//	
 	
 	public ContaBancaria salvar(ContaBancaria contaBancaria) {
 		
-		Beneficiario beneficiarioPesquisado = pesquisarBeneficiario.
-				findById(contaBancaria.getBeneficiario().getId()).
-				orElseThrow(() -> new EntidadeNaoEncontradaException("O beneficiário informado não existe"));
+		Beneficiario beneficiarioPesquisado = beneficiario.
+				localizarEntidade(contaBancaria.getBeneficiario().getId());
 				     
 		contaBancaria.setBeneficiario(beneficiarioPesquisado);
 				
 		return contasBancarias.save(contaBancaria);
 	}
-	
+//**********************************************************************************************//	
 	public void excluir(Long id) {
 		try {
 			contasBancarias.deleteById(id);
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.
-					format("Conta Bancaria de código %d não existe", id));
+					format(ENTIDADE_NAO_ENONTRDA, id));
 		}catch(DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(String.
-					format("Conta Bancaia de código %d não pode ser removida, pois está em uso", id));
+					format(ENTIDADE_EM_USO, id));
 		}
 	}
-
+//************************************************************************************************//
+	
+	public ContaBancaria localizarEntidade(Long id) {
+		ContaBancaria contaLocalizada = contasBancarias.findById(id).orElseThrow(()-> new EntidadeNaoEncontradaException(String.
+				format(ENTIDADE_NAO_ENONTRDA, id)));
+		return contaLocalizada;
+	}
 }
