@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.NegocioException;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.ProcessoNaoEncontradoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Processo;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ProcessoRepository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.service.CadastroProcessoService;
@@ -39,53 +42,39 @@ public class ProcessoController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Processo> Buscar(@PathVariable Long id){
-		
-		Optional<Processo> processo = processos.findById(id);
-		
-		if(processo.isPresent()) {
-		return ResponseEntity.status(HttpStatus.OK).body(processo.get());
-		}
-	
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	@ResponseStatus(HttpStatus.OK)
+	public Processo Buscar(@PathVariable Long id){
+		return cadastroProcesso.localizarEntidade(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> adicionar(@RequestBody Processo processo) {
-		
+	@ResponseStatus(HttpStatus.CREATED)
+	public Processo adicionar(@RequestBody Processo processo) {
 		try{
-			cadastroProcesso.salvar(processo);
-			return ResponseEntity.status(HttpStatus.CREATED).body(processo);
-		}catch (EntidadeNaoEncontradaException e){
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+			return cadastroProcesso.salvar(processo);
+		}catch (ProcessoNaoEncontradoException e){
+			throw new NegocioException(e.getMessage(), e);
 		}
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Processo processo){
-		 Optional<Processo> processoProcurado = processos.findById(id);
+	@ResponseStatus(HttpStatus.OK)
+	public Processo atualizar(@PathVariable Long id, @RequestBody Processo processo){
+		 	try {
+				Processo processoProcurado = cadastroProcesso.localizarEntidade(id);
+				BeanUtils.copyProperties(processo, processoProcurado, "id");
+			return cadastroProcesso.salvar(processoProcurado);
+		 	}catch(EntidadeNaoEncontradaException e) {
+		 		throw new NegocioException(e.getMessage(), e);	
+		 	}
 		 
-		 if(processoProcurado.isPresent()) {
-			 BeanUtils.copyProperties(processo, processoProcurado.get(), "id");
-			 Processo processoNovo = cadastroProcesso.salvar(processoProcurado.get());
-			 return ResponseEntity.status(HttpStatus.OK).body(processoNovo);
-		 }
-		 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	 }
 	
-	
-	
+		
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Processo> excluir(@PathVariable Long id){
-		try {
-			cadastroProcesso.remover(id);
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		}catch(EntidadeEmUsoException e){
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}catch(EntidadeNaoEncontradaException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-			
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void excluir(@PathVariable Long id){
+		cadastroProcesso.remover(id);
 	}
 
    

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
@@ -40,33 +41,27 @@ public class LocalizacaoController {
 	}
 	
 	@GetMapping("/{id}")
-	private ResponseEntity<?> buscar(@PathVariable Long id){
-		
-		Optional<Localizacao> localizacaoPesquisada = localizacoes.findById(id);
-		
-			if(localizacaoPesquisada.isPresent()) {
-				return ResponseEntity.status(HttpStatus.OK).body(localizacaoPesquisada.get());
-			}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	@ResponseStatus(HttpStatus.OK)
+	private Localizacao buscar(@PathVariable Long id){
+		return cadastroLocalizacao.localizarEntidade(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?>adicionar(@RequestBody Localizacao localizacao){
-		cadastroLocalizacao.salvar(localizacao);
+	@ResponseStatus(HttpStatus.CREATED)
+	public Localizacao adicionar(@RequestBody Localizacao localizacao){
+		return cadastroLocalizacao.salvar(localizacao);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(localizacao);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Localizacao localizacao){
-		Optional<Localizacao> localizacaoEnviada = localizacoes.findById(id);
+	@ResponseStatus(HttpStatus.CREATED)
+	public Localizacao atualizar(@PathVariable Long id, @RequestBody Localizacao localizacao){
 		
-		if(localizacaoEnviada.isPresent()) {
-			
-			BeanUtils.copyProperties(localizacao, localizacaoEnviada.get(), "id");
-			Localizacao localizacaoSalva = cadastroLocalizacao.salvar(localizacaoEnviada.get());
-			return ResponseEntity.status(HttpStatus.OK).body(localizacaoSalva);
-		}
+		 cadastroLocalizacao.localizarEntidade(id);
+		 BeanUtils.copyProperties(localizacao, localizacaoEnviada.get(), "id");
+		 Localizacao localizacaoSalva = cadastroLocalizacao.salvar(localizacaoEnviada.get());
+		 return ResponseEntity.status(HttpStatus.OK).body(localizacaoSalva);
+		
 		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}

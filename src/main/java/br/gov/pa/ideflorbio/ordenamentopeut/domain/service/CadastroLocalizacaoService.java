@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.LocalizacaoNaoEncontradaException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Localizacao;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.LocalizacaoRepository;
 
@@ -17,16 +18,22 @@ public class CadastroLocalizacaoService {
 	@Autowired
 	private LocalizacaoRepository localizacoes;
 	
+//------------------------------------------------------------------------------------//
+	//1
 	public Localizacao salvar(Localizacao localizacao) {
 		return localizacoes.save(localizacao);
+	}
+	//2
+	public Localizacao localizarEntidade(Long id) {
+		return localizacoes.findById(id).
+				orElseThrow(()-> new LocalizacaoNaoEncontradaException(id));
 	}
 	
 	public void remover(Long id) {
 		try {
 			localizacoes.deleteById(id);
 		}catch(DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.
-					format("A localização de código %d não pode ser removida, pois está em uso", id));
+			throw new LocalizacaoNaoEncontradaException(id);
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.
 					format("A localização de código %d não existe", id));

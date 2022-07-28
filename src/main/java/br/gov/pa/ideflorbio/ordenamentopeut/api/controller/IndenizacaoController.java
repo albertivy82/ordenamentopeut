@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Indenizacao;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Localizacao;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.IndenizacaoRepository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.service.CadastroIndenizacaoService;
 
@@ -40,26 +42,15 @@ public class IndenizacaoController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Indenizacao> buscar(@PathVariable Long id){
-		
-		Optional<Indenizacao> indenizacao = indenizacoes.findById(id);
-		
-		if(indenizacao.isPresent()) {
-		return ResponseEntity.status(HttpStatus.OK).body(indenizacao.get());
-		}
-	
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	@ResponseStatus(HttpStatus.OK)
+	public Indenizacao buscar(@PathVariable Long id){
+		return cadastroIndenizacao.localizarEntidade(id);
 	}
 	
-	
 	@PostMapping
-	public ResponseEntity<?> adicionar(@RequestBody Indenizacao indenizacao){
-		try {
-			Indenizacao indenizacaoCadastrada = cadastroIndenizacao.salvar(indenizacao);
-			return ResponseEntity.status(HttpStatus.CREATED).body(indenizacaoCadastrada);
-		}catch(EntidadeNaoEncontradaException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.CREATED)
+	public Indenizacao adicionar(@RequestBody Indenizacao indenizacao){
+		return cadastroIndenizacao.salvar(indenizacao);
 	}
 	
 	@PutMapping("/{id}")

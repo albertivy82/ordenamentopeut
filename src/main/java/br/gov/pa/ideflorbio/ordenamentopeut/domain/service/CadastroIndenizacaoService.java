@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.IndenizacaoNaoEncontradaException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.ContaBancaria;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Indenizacao;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Orcamento;
@@ -55,6 +56,11 @@ public class CadastroIndenizacaoService {
 		return indenizacoes.save(indenizacao);
 	}
 	
+	public Indenizacao localizarEntidade(Long id) {
+		return indenizacoes.findById(id).
+				orElseThrow(()-> new IndenizacaoNaoEncontradaException(id));
+	}
+	
 	
 	public void remover(Long id) {
 		
@@ -64,8 +70,7 @@ public class CadastroIndenizacaoService {
 			throw new EntidadeEmUsoException(String.
 					format("Indenizacao de código %d não pode ser removido, pois está em uso", id));
 		}catch(EmptyResultDataAccessException e) {
-			throw new EntidadeNaoEncontradaException(String.
-					format("Indenizacao de código %d não existe", id));
+			throw new IndenizacaoNaoEncontradaException(id);
 		}
 	}
 

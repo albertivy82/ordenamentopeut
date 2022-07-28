@@ -4,14 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.LocalizacaoNaoEncontradaException;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.ProcessoNaoEncontradoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Beneficiario;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Localizacao;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Processo;
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.BeneficiarioRepository;
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.LocalizacaoRepository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ProcessoRepository;
 
 @Service
@@ -21,19 +19,22 @@ public class CadastroProcessoService {
 	private ProcessoRepository processos;
 	
 	@Autowired
-	private BeneficiarioRepository beneficiarios;
+	private CadastroBeneficiarioService beneficiarios;
 	
 	@Autowired
-	private LocalizacaoRepository localizacoes;
+	private CadastroLocalizacaoService localizacoes;
 	
 	
 	//-----MÉTODOS------//
 	
 	public Processo salvar(Processo processo) {
-		Beneficiario beneficiarioProcurado = beneficiarios.findById(processo.getBeneficiario().getId()).
-				orElseThrow(()-> new EntidadeNaoEncontradaException("O beneficiario informado não existe"));
-		Localizacao localizacaoProcurada = localizacoes.findById(processo.getLocalizacao().getId()).
-				orElseThrow(()-> new EntidadeNaoEncontradaException("A localizacao informada não existe"));
+		
+		
+		Beneficiario beneficiarioProcurado = beneficiarios.
+				localizarEntidade(processo.getBeneficiario().getId());
+		
+		Localizacao localizacaoProcurada = localizacoes.
+				localizarEntidade(processo.getLocalizacao().getId());
 		
 		
 		processo.setBeneficiario(beneficiarioProcurado);
@@ -41,12 +42,17 @@ public class CadastroProcessoService {
 		return processos.save(processo);
 	}
 	
+	public Processo localizarEntidade(Long id) {
+		return processos.findById(id).
+				orElseThrow(()-> new ProcessoNaoEncontradoException(id));
+	}
+	
 	public void remover(Long id) {
 		
 		try {
 		processos.deleteById(id);
 		}catch(DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.format("Processo de código %d não pode ser removido, pois está em uso", id));
+			throw new LocalizacaoNaoEncontradaException(id);
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.format("Processo de código %d não existe", id));
 		}
