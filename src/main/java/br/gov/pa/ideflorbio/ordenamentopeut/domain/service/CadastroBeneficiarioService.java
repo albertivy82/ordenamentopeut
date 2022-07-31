@@ -2,10 +2,13 @@ package br.gov.pa.ideflorbio.ordenamentopeut.domain.service;
 
 
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.BeneficiarioNaoEncontradoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
@@ -22,17 +25,20 @@ public class CadastroBeneficiarioService {
 	private BeneficiarioRepository beneficiarios;
 	
 	//------MÉTODOS------//
-	
+	//1______________________________________________________
+	@Transactional
 	public Beneficiario salvar(Beneficiario beneficiario) {
 		return beneficiarios.save(beneficiario);
 	}
-	
+	//2_______________________________________________________
 	public Beneficiario localizarEntidade(Long id) {
 		Beneficiario  beneficiario = beneficiarios.findById(id).
 				orElseThrow(()-> new BeneficiarioNaoEncontradoException(id));
 		return beneficiario;
 	}
 	
+	//3________________________________________________________
+	@Transactional
 	public void remover(Long id) {
 		try {	
 			beneficiarios.deleteById(id);

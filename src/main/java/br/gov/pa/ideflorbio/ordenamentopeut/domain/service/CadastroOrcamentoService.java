@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
+import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.OrcamentoNaoEncontradoException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Orcamento;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.OrcamentoRepository;
 
@@ -19,16 +20,24 @@ public class CadastroOrcamentoService {
 	
 	//-------MÉTODOS--------//
 	
+	//1____________________________________________________
+	@Transactional
 	public Orcamento salvar(Orcamento orcamento) {
 		return orcamentos.save(orcamento);
 	}
 	
+	//2____________________________________________________
+	public Orcamento localizarEntidade(Long id) {
+		return orcamentos.findById(id).orElseThrow(()-> new OrcamentoNaoEncontradoException(id));
+	}
+	
+	//3_____________________________________________________
+	@Transactional
 	public void remover(Long id) {
 		try {
 			orcamentos.deleteById(id);
 		}catch(DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.
-					format("Orçamento de código %d não pode ser removido, pois está em uso", id));
+			throw new OrcamentoNaoEncontradoException(id);
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.
 					format("Orçamento de código %d não existe", id));

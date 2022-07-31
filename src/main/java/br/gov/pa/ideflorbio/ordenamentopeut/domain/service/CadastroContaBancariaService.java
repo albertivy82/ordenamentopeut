@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.ContaBancariaNaoEncontradaException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
@@ -25,7 +26,8 @@ public class CadastroContaBancariaService {
 	private CadastroBeneficiarioService beneficiario;
 	
 //-------------------------------------------------------------------------------------------------//	
-	
+	//1____________________________________________________________________
+	@Transactional
 	public ContaBancaria salvar(ContaBancaria contaBancaria) {
 		
 		Beneficiario beneficiarioPesquisado = beneficiario.
@@ -36,6 +38,8 @@ public class CadastroContaBancariaService {
 		return contasBancarias.save(contaBancaria);
 	}
 //**********************************************************************************************//	
+	//2___________________________________________________________________
+	@Transactional
 	public void excluir(Long id) {
 		try {
 			contasBancarias.deleteById(id);

@@ -4,18 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeEmUsoException;
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.EntidadeNaoEncontradaException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.exception.IndenizacaoNaoEncontradaException;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.ContaBancaria;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Indenizacao;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Orcamento;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.model.Processo;
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ContaBancariaRepository;
 import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.IndenizacaoRepository;
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.OrcamentoRepository;
-import br.gov.pa.ideflorbio.ordenamentopeut.domain.repository.ProcessoRepository;
 
 @Service
 public class CadastroIndenizacaoService {
@@ -24,30 +20,28 @@ public class CadastroIndenizacaoService {
 	public IndenizacaoRepository indenizacoes;
 	
 	@Autowired
-	private ContaBancariaRepository pesquisarConta;
+	private CadastroContaBancariaService pesquisarConta;
 	
 	@Autowired
-	private ProcessoRepository pesquisaProcesso;
+	private CadastroProcessoService pesquisaProcesso;
 	
 	@Autowired
-	private OrcamentoRepository pesquisaOrcamento;
+	private CadastroOrcamentoService pesquisaOrcamento;
 	
 	
 	//--------MÉTODOS---------//
-	
+	//1__________________________________
+	@Transactional
 	public Indenizacao salvar(Indenizacao indenizacao) {
 		
 		ContaBancaria contaPesquisada = pesquisarConta.
-				findById(indenizacao.getContaDeposito().getId()).
-				orElseThrow(()-> new EntidadeNaoEncontradaException("A Conta Bancária informada não existe"));
+				localizarEntidade(indenizacao.getContaDeposito().getId());
 		
 		Processo processopesquisado = pesquisaProcesso.
-				findById(indenizacao.getProcesso().getId()).
-				orElseThrow(()->new EntidadeNaoEncontradaException("O processo informado não existe"));
+				localizarEntidade(indenizacao.getProcesso().getId());
 		
 		Orcamento orcamentoPesquisado = pesquisaOrcamento.
-				findById(indenizacao.getOrcamento().getId()).
-				orElseThrow(()-> new EntidadeNaoEncontradaException("O orçamento informado não existe"));
+				localizarEntidade(indenizacao.getOrcamento().getId());
 		
 		indenizacao.setContaDeposito(contaPesquisada);
 		indenizacao.setProcesso(processopesquisado);
@@ -56,19 +50,20 @@ public class CadastroIndenizacaoService {
 		return indenizacoes.save(indenizacao);
 	}
 	
+	//2____________________________________
 	public Indenizacao localizarEntidade(Long id) {
 		return indenizacoes.findById(id).
 				orElseThrow(()-> new IndenizacaoNaoEncontradaException(id));
 	}
 	
-	
+	//3________________________________
+	@Transactional
 	public void remover(Long id) {
 		
 		try {
 		indenizacoes.deleteById(id);
 		}catch(DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.
-					format("Indenizacao de código %d não pode ser removido, pois está em uso", id));
+			throw new IndenizacaoNaoEncontradaException(id);
 		}catch(EmptyResultDataAccessException e) {
 			throw new IndenizacaoNaoEncontradaException(id);
 		}
